@@ -24,15 +24,8 @@ public abstract class Jugador implements Runnable{
 		
 	}
 	
-	public Jugador(int id, String name, String ubicacion) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.alineacion = ubicacion;
-	}
-	
-	
 
+	
 	public Jugador(int id, String name, String ubicacion, Balon brazuca,
 			Tablero tablero) {
 		super();
@@ -89,6 +82,20 @@ public abstract class Jugador implements Runnable{
 
 	public void setTermino(boolean termino) {
 		this.termino = termino;
+	}
+	
+	public void desvincularTablero(){
+		int numJugadores = tablero.subtractNumJugadores(); 
+		if(numJugadores == 0){
+			termino = true;
+		}
+	}
+	
+	public void vincularTablero(){
+		tablero.addNumJugadores();
+		if(termino){
+			tablero.setTermino(true);
+		}
 	}
 	
 }

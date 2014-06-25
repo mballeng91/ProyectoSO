@@ -25,6 +25,11 @@ public class Tablero {
 		return numJugadoresTotal;
 	}
 	
+	/**
+	 * Reduce el numero de jugadores que tiene en total 
+	 * 
+	 * @return el numero de jugadores que quedaron
+	 */
 	public synchronized int subtractNumJugadores(){
 		numJugadoresTotal--;
 		return numJugadoresTotal;

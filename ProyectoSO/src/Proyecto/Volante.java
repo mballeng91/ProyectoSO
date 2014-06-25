@@ -2,11 +2,7 @@ package Proyecto;
 
 public class Volante extends Jugador{
 
-	
-	public Volante(int id, String name, String ubicacion) {
-		super(id, name, ubicacion);
-		System.out.println("Se a creado el Volante "+id+" Nombre: "+name);
-	}
+
 	
 	public Volante(int id, String ubicacion) {
 		super(id, ubicacion);
@@ -29,10 +25,20 @@ public class Volante extends Jugador{
 	public void run() {
 		
 		while( !tablero.isTermino() ){
-			brazuca.addJugador( this );
-			
+			if(tablero.getUbicacionInt() ==  brazuca.getPosicion()){
+				brazuca.addJugador( this );
+				brazuca.mover();
+				//notifyAll();
+			}else{
+//				try {
+//					this.wait();
+//				} catch (InterruptedException e) {
+//					System.out.println("NO quiero detenerme, ahora te mordere :3" + name);
+//					e.printStackTrace();
+//				}
+			}
 			//brazuca.moverJugadores();
-			brazuca.mover();
+			
 		}
 		
 	}

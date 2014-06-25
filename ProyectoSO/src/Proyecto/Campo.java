@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import javax.swing.text.AbstractDocument.BranchElement;
+
 
 /**
  * Clase principal la en la cual se inician y coordinan las variables globales.  
@@ -64,34 +66,52 @@ public class Campo {
 		tableros[0] = new Tablero(nombreTablero0, derecha,0);
 		tableros[1] = new Tablero(nombreTablero1, izquierda,1);
 		
-		Balon balon = new Balon();
+		Balon balon = new Balon(tableros);
 		
 		Jugador[] jugadoresCol = new Jugador[derecha];
 		Jugador[] jugadoresAle = new Jugador[izquierda];
-		int idxCol, idxAle;
-		idxCol = idxAle = 0;
+		Thread hilos [] = new Thread[derecha + izquierda];
+		
+		int idxCol, idxAle, idxH;
+		idxCol = idxAle = idxH = 0;
 		
 		//*********************Crear Jugadores del lado Derecho******************************
 		//Crear Volantes
 		for( ; idxCol < volantesCol ; idxCol++){
-			jugadoresCol[idxCol] = new Volante(idxCol, "Col"+idxCol, "Volante");
+			
+			jugadoresCol[idxCol] = new Volante(idxCol, "Col"+idxCol, "Volante", balon, tableros[0] );
+			hilos[idxH++] = new Thread(jugadoresCol[idxCol]);
 		}
 		//Crear Delanteros
 		for( ; idxCol < derecha ; idxCol++){
-			jugadoresCol[idxCol] = new Delantero(idxCol, "Col"+idxCol, "Delantero");
+			jugadoresCol[idxCol] = new Delantero(idxCol, "Col"+idxCol, "Delantero", balon, tableros[0]);
+			hilos[idxH++] = new Thread(jugadoresCol[idxCol]);
 		}
 		
 		//*********************Crear Jugadores del lado Izquierdo******************************
 		//Crear Volantes
 		for( ; idxAle < volantesAle ; idxAle++) {
-			jugadoresAle[idxAle] = new Volante(idxAle, "Ale"+idxAle, "Volante");
+			jugadoresAle[idxAle] = new Volante(idxAle, "Ale"+idxAle, "Volante", balon, tableros[1]);
+			hilos[idxH++] = new Thread(jugadoresAle[idxAle]);
 		}
 		//Crear Delanteros
 		for( ; idxAle < izquierda ; idxAle++) {
-			jugadoresAle[idxAle] = new Delantero(idxAle, "Ale"+idxAle, "Delantero");
+			jugadoresAle[idxAle] = new Delantero(idxAle, "Ale"+idxAle, "Delantero", balon, tableros[1]);
+			hilos[idxH++] = new Thread(jugadoresAle[idxAle]);
 		}
 		
+		for(int k = 0; k < idxH; k++){
+			hilos[k].start();
+		}
 		
+		for(int k = 0; k < idxH; k++){
+			try {
+				hilos[k].join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
